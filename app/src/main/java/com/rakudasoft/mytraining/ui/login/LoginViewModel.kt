@@ -8,6 +8,7 @@ import com.rakudasoft.mytraining.data.LoginRepository
 import com.rakudasoft.mytraining.data.Result
 
 import com.rakudasoft.mytraining.R
+import java.lang.Exception
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
@@ -17,18 +18,46 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-    fun login(username: String, password: String) {
-        // can be launched in a separate asynchronous job
-        loginRepository.completedListner = {
+    init {
+        loginRepository.signInCompletedListner = {
+            loginRepository.signInCompletedListner = {
+                if (it is Result.Success) {
+                    _loginResult.value =
+                        LoginResult(loginSuccess = LoggedInUserView(displayName = it.data.displayName))
+                } else if (it is Result.Error) {
+                    _loginResult.value =
+                        LoginResult(message = it.exception.message)
+                }
+            }
             if (it is Result.Success) {
                 _loginResult.value =
-                    LoginResult(success = LoggedInUserView(displayName = it.data.displayName))
-            } else {
-                _loginResult.value = LoginResult(error = R.string.login_failed)
+                    LoginResult(loginSuccess = LoggedInUserView(displayName = it.data.displayName))
+            } else if (it is Result.Error) {
+                _loginResult.value =
+                    LoginResult(message = it.exception.message)
             }
         }
 
+        loginRepository.signUpCompletedListener = {
+            if (it is Result.Success) {
+                _loginResult.value =
+                    LoginResult(registerSuccess = it.data.displayName)
+            } else if (it is Result.Error) {
+                _loginResult.value =
+                    LoginResult(message = it.exception.message)
+            }
+        }
+
+    }
+
+    fun login(username: String, password: String) {
+        // can be launched in a separate asynchronous job
         loginRepository.login(username, password)
+    }
+
+    fun register(username: String, password: String) {
+        // can be launched in a separate asynchronous job
+        loginRepository.register(username, password)
     }
 
     fun loginDataChanged(username: String, password: String) {

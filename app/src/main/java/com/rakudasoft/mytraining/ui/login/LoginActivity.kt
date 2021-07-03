@@ -31,6 +31,8 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.password
         val login = binding.login
         val loading = binding.loading
+        val register = binding.regiser
+        val message = binding.message
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
@@ -40,6 +42,7 @@ class LoginActivity : AppCompatActivity() {
 
             // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
+            register.isEnabled = loginState.isDataValid
 
             if (loginState.usernameError != null) {
                 username.error = getString(loginState.usernameError)
@@ -52,12 +55,23 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
 
+            // enable ui
+            username.isEnabled = true
+            password.isEnabled = true
+            login.isEnabled = true
+            register.isEnabled = true
+
+            // hide loading
             loading.visibility = View.GONE
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
+                message.text = loginResult.message
             }
-            if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
+
+
+
+            if (loginResult.loginSuccess != null) {
+                updateUiWithUser(loginResult.loginSuccess)
 
                 setResult(Activity.RESULT_OK)
                 finish()
@@ -92,9 +106,39 @@ class LoginActivity : AppCompatActivity() {
             }
 
             login.setOnClickListener {
+                // disable ui
+                username.isEnabled = false
+                password.isEnabled = false
+                login.isEnabled = false
+                register.isEnabled = false
+
+                // clear message
+                message.text = ""
+
+                // loading view
                 loading.visibility = View.VISIBLE
+
+                // login
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
+
+            register.setOnClickListener {
+                // disable ui
+                username.isEnabled = false
+                password.isEnabled = false
+                login.isEnabled = false
+                register.isEnabled = false
+
+                // clear message
+                message.text = ""
+
+                // loading view
+                loading.visibility = View.VISIBLE
+
+                // login
+                loginViewModel.register(username.text.toString(), password.text.toString())
+            }
+
         }
     }
 

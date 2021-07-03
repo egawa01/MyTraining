@@ -8,7 +8,11 @@ import com.rakudasoft.mytraining.data.model.LoggedInUser
  */
 
 class LoginRepository(val dataSource: LoginDataSource) {
-    var completedListner : OnCompletedListener? = null
+    var signInCompletedListner : OnSignInCompletedListener? = null
+
+    var signUpCompletedListener : OnSignUpCompletedListener? = null
+
+
 
     // in-memory cache of the loggedInUser object
     var user: LoggedInUser? = null
@@ -30,12 +34,20 @@ class LoginRepository(val dataSource: LoginDataSource) {
 
     fun login(username: String, password: String) {
         // handle login
-        dataSource.completedListener = {
+        dataSource.signInCompletedListener = {
             if (it is Result.Success) {
                 this.user = it.data as LoggedInUser
             }
-            completedListner?.invoke(it)
+            signInCompletedListner?.invoke(it)
         }
         dataSource.login(username, password)
+    }
+
+    fun register(username: String, password: String) {
+        // handle register
+        dataSource.signUpCompletedListener = {
+            signUpCompletedListener?.invoke(it)
+        }
+        dataSource.register(username, password)
     }
 }
