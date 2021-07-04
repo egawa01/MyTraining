@@ -25,7 +25,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
                     LoginResult(loginSuccess = LoggedInUserView(displayName = it.data.displayName))
             } else if (it is Result.Error) {
                 _loginResult.value =
-                    LoginResult(error = it.exception.message)
+                    LoginResult(error = getErrorMessage(it.exception))
             }
         }
 
@@ -35,7 +35,17 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
                     LoginResult(registerSuccess = it.data.displayName)
             } else if (it is Result.Error) {
                 _loginResult.value =
-                    LoginResult(error = it.exception.message)
+                    LoginResult(error = getErrorMessage(it.exception))
+            }
+        }
+
+        loginRepository.resetPasswordCompletedListener = {
+            if (it is Result.Success) {
+                _loginResult.value =
+                    LoginResult(resetPasswordSuccess = it.data.displayName)
+            } else if (it is Result.Error) {
+                _loginResult.value =
+                    LoginResult(error = getErrorMessage(it.exception))
             }
         }
 
@@ -49,6 +59,10 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     fun register(username: String, password: String) {
         // can be launched in a separate asynchronous job
         loginRepository.register(username, password)
+    }
+
+    fun resetPassword(username : String) {
+        loginRepository.resetPassword(username)
     }
 
     fun loginDataChanged(username: String, password: String) {
@@ -73,5 +87,9 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
         return password.length > 5
+    }
+
+    private fun getErrorMessage(exception : Exception) : String {
+        return "message:" + exception.message + ",stacktrace:" + exception.toString()
     }
 }

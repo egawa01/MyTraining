@@ -6,5 +6,6 @@ package com.rakudasoft.mytraining.ui.login
 data class LoginResult(
     val loginSuccess: LoggedInUserView? = null,
     val registerSuccess : String? = null,
+    val resetPasswordSuccess : String? = null,
     val error : String? = null
 )

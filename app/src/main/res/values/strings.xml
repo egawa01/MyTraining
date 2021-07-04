@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">My Training</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login">Login</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
@@ -10,4 +10,16 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="action_regiser">register</string>
+    <string name="action_reset_password">reset password</string>
+    <string name="message_reset_password_success">Check mail for resetting password!!</string>
+    <string name="message_register_success">Check mail for verifying user!!</string>
+    <string name="extra_username">com.rakudasoft.mytraining.USERNAME</string>
+    <string name="error_sign_in_failure">Id or Password is not correct or registered.</string>
+    <string name="error_sign_in_not_verified">Your id has not verified. Verify your id by mail.</string>
+    <string name="error_sign_in_error">Log In Error</string>
+    <string name="error_sign_up_failure">Fail to register.</string>
+    <string name="error_sign_up_error">Registration Error</string>
+    <string name="error_reset_password_failure">Fail to reset password.</string>
+    <string name="error_reset_password_error">Resetting password Error</string>
+
 </resources>

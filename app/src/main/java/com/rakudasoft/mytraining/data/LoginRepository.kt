@@ -12,7 +12,7 @@ class LoginRepository(val dataSource: LoginDataSource) {
 
     var signUpCompletedListener : OnSignUpCompletedListener? = null
 
-
+    var resetPasswordCompletedListener : OnResetPasswordCompletedListener? = null
 
     // in-memory cache of the loggedInUser object
     var user: LoggedInUser? = null
@@ -37,6 +37,10 @@ class LoginRepository(val dataSource: LoginDataSource) {
             signUpCompletedListener?.invoke(it)
         }
 
+        dataSource.resetPasswordCompletedListner = {
+            resetPasswordCompletedListener?.invoke(it)
+        }
+
     }
 
     fun logout() {
@@ -52,5 +56,9 @@ class LoginRepository(val dataSource: LoginDataSource) {
     fun register(username: String, password: String) {
         // handle register
         dataSource.register(username, password)
+    }
+
+    fun resetPassword(username : String) {
+        dataSource.resetPassword(username)
     }
 }
