@@ -5,6 +5,7 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.rakudasoft.mytraining.data.model.LoggedInUser
 import com.rakudasoft.mytraining.data.model.RegiseredUser
 import java.io.IOException
@@ -36,24 +37,19 @@ class LoginDataSource {
             auth.signInWithEmailAndPassword(username,password)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        if ((it.result as AuthResult).user!!.isEmailVerified) {
-                            val user = LoggedInUser(username, username)
-                            signInCompletedListener?.invoke(Result.Success(user))
+                        val user : FirebaseUser? = (it.result as AuthResult).user
+                        if (user!!.isEmailVerified) {
+                            signInCompletedListener?.invoke(Result.Success(LoggedInUser(username, username)))
                         } else {
-                            signInCompletedListener?.invoke(Result.Error(IOException("Login User has not verified.")))
+                            user.sendEmailVerification()
+                            signInCompletedListener?.invoke(Result.Error(IOException("Check Verification Mail!!")))
                         }
                     } else {
-                        signInCompletedListener?.invoke(Result.Error(IOException("Log in not Success", it.exception)))
+                        signInCompletedListener?.invoke(Result.Error(IOException("Log In Failure", it.exception)))
                     }
                 }
-                .addOnFailureListener {
-                    signInCompletedListener?.invoke(Result.Error(IOException("Log in Failure", it)))
-                }
-
-            //val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Jane Doe")
-            //return Result.Success(fakeUser)
         } catch (e: Throwable) {
-            signInCompletedListener?.invoke(Result.Error(IOException("Error logging in", e)))
+            signInCompletedListener?.invoke(Result.Error(IOException("Log In Error", e)))
         }
     }
 

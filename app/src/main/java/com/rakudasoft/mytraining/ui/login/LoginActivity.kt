@@ -63,20 +63,16 @@ class LoginActivity : AppCompatActivity() {
 
             // hide loading
             loading.visibility = View.GONE
+
+            // update message or finish
             if (loginResult.error != null) {
-                showLoginFailed(loginResult.error)
-                message.text = loginResult.message
-            }
-
-
-
-            if (loginResult.loginSuccess != null) {
-                updateUiWithUser(loginResult.loginSuccess)
-
+                message.text = loginResult.error
+            } else if (loginResult.registerSuccess != null) {
+                message.text = "Check verification mail!!"
+            } else if (loginResult.loginSuccess != null) {
                 setResult(Activity.RESULT_OK)
                 finish()
             }
-
         })
 
         username.afterTextChanged {
@@ -84,6 +80,40 @@ class LoginActivity : AppCompatActivity() {
                 username.text.toString(),
                 password.text.toString()
             )
+        }
+
+        login.setOnClickListener {
+            // disable ui
+            username.isEnabled = false
+            password.isEnabled = false
+            login.isEnabled = false
+            register.isEnabled = false
+
+            // clear message
+            message.text = ""
+
+            // loading view
+            loading.visibility = View.VISIBLE
+
+            // login
+            loginViewModel.login(username.text.toString(), password.text.toString())
+        }
+
+        register.setOnClickListener {
+            // disable ui
+            username.isEnabled = false
+            password.isEnabled = false
+            login.isEnabled = false
+            register.isEnabled = false
+
+            // clear message
+            message.text = ""
+
+            // loading view
+            loading.visibility = View.VISIBLE
+
+            // login
+            loginViewModel.register(username.text.toString(), password.text.toString())
         }
 
         password.apply {
@@ -104,57 +134,7 @@ class LoginActivity : AppCompatActivity() {
                 }
                 false
             }
-
-            login.setOnClickListener {
-                // disable ui
-                username.isEnabled = false
-                password.isEnabled = false
-                login.isEnabled = false
-                register.isEnabled = false
-
-                // clear message
-                message.text = ""
-
-                // loading view
-                loading.visibility = View.VISIBLE
-
-                // login
-                loginViewModel.login(username.text.toString(), password.text.toString())
-            }
-
-            register.setOnClickListener {
-                // disable ui
-                username.isEnabled = false
-                password.isEnabled = false
-                login.isEnabled = false
-                register.isEnabled = false
-
-                // clear message
-                message.text = ""
-
-                // loading view
-                loading.visibility = View.VISIBLE
-
-                // login
-                loginViewModel.register(username.text.toString(), password.text.toString())
-            }
-
         }
-    }
-
-    private fun updateUiWithUser(model: LoggedInUserView) {
-        val welcome = getString(R.string.welcome)
-        val displayName = model.displayName
-        // TODO : initiate successful logged in experience
-        Toast.makeText(
-            applicationContext,
-            "$welcome $displayName",
-            Toast.LENGTH_LONG
-        ).show()
-    }
-
-    private fun showLoginFailed(@StringRes errorString: Int) {
-        Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 }
 

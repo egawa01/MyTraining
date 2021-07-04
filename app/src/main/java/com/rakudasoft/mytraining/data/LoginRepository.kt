@@ -25,6 +25,18 @@ class LoginRepository(val dataSource: LoginDataSource) {
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
         user = null
+
+        dataSource.signInCompletedListener = {
+            if (it is Result.Success) {
+                this.user = it.data as LoggedInUser
+            }
+            signInCompletedListner?.invoke(it)
+        }
+
+        dataSource.signUpCompletedListener = {
+            signUpCompletedListener?.invoke(it)
+        }
+
     }
 
     fun logout() {
@@ -34,20 +46,11 @@ class LoginRepository(val dataSource: LoginDataSource) {
 
     fun login(username: String, password: String) {
         // handle login
-        dataSource.signInCompletedListener = {
-            if (it is Result.Success) {
-                this.user = it.data as LoggedInUser
-            }
-            signInCompletedListner?.invoke(it)
-        }
         dataSource.login(username, password)
     }
 
     fun register(username: String, password: String) {
         // handle register
-        dataSource.signUpCompletedListener = {
-            signUpCompletedListener?.invoke(it)
-        }
         dataSource.register(username, password)
     }
 }

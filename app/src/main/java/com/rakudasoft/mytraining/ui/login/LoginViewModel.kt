@@ -20,21 +20,12 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     init {
         loginRepository.signInCompletedListner = {
-            loginRepository.signInCompletedListner = {
-                if (it is Result.Success) {
-                    _loginResult.value =
-                        LoginResult(loginSuccess = LoggedInUserView(displayName = it.data.displayName))
-                } else if (it is Result.Error) {
-                    _loginResult.value =
-                        LoginResult(message = it.exception.message)
-                }
-            }
             if (it is Result.Success) {
                 _loginResult.value =
                     LoginResult(loginSuccess = LoggedInUserView(displayName = it.data.displayName))
             } else if (it is Result.Error) {
                 _loginResult.value =
-                    LoginResult(message = it.exception.message)
+                    LoginResult(error = it.exception.message)
             }
         }
 
@@ -44,7 +35,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
                     LoginResult(registerSuccess = it.data.displayName)
             } else if (it is Result.Error) {
                 _loginResult.value =
-                    LoginResult(message = it.exception.message)
+                    LoginResult(error = it.exception.message)
             }
         }
 
