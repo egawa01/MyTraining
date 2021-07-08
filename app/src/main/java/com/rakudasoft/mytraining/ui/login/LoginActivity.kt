@@ -9,6 +9,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -29,6 +30,8 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Log.d("VERBOSE", "LoginActivity OnCreate")
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -48,6 +51,8 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
 
+            Log.d("VERBOSE", "loginFormState changed")
+
             // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
             register.isEnabled = loginState.isDataValid
@@ -64,21 +69,32 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
 
+            Log.d("VERBOSE", "loginResult changed")
+
             // hide loading
             loading.visibility = View.GONE
 
             // update message or finish
-            if (loginResult.error != null) {
-                message.text = loginResult.error
-            } else if (loginResult.resetPasswordSuccess != null) {
-                message.text = getString(R.string.message_reset_password_success)
-            } else if (loginResult.registerSuccess != null) {
-                message.text = getString(R.string.message_register_success)
-            } else if (loginResult.loginSuccess != null) {
-                val intent = Intent()
-                intent.putExtra(getString(R.string.extra_username), loginResult.loginSuccess.displayName)
-                setResult(Activity.RESULT_OK, intent)
-                finish()
+            when {
+                loginResult.error != null -> {
+                    Log.d("VERBOSE", "loginResult error")
+                    message.text = loginResult.error
+                }
+                loginResult.resetPasswordSuccess != null -> {
+                    Log.d("VERBOSE", "loginResult reset password")
+                    message.text = getString(R.string.message_reset_password_success)
+                }
+                loginResult.registerSuccess != null -> {
+                    Log.d("VERBOSE", "loginResult registered")
+                    message.text = getString(R.string.message_register_success)
+                }
+                loginResult.loginSuccess != null -> {
+                    Log.d("VERBOSE", "loginResult logged in")
+                    val intent = Intent()
+                    intent.putExtra(getString(R.string.extra_username), loginResult.loginSuccess.displayName)
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
             }
         })
 
