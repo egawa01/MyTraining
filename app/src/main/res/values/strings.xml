@@ -21,5 +21,6 @@
     <string name="error_sign_up_error">Registration Error</string>
     <string name="error_reset_password_failure">Fail to reset password.</string>
     <string name="error_reset_password_error">Resetting password Error</string>
+    <string name="error_unknown">Unknown Error</string>
 
 </resources>

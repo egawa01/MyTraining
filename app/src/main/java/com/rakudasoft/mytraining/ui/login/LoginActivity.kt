@@ -17,6 +17,7 @@ import android.widget.Toast
 import com.rakudasoft.mytraining.databinding.ActivityLoginBinding
 
 import com.rakudasoft.mytraining.R
+import java.io.IOException
 
 class LoginActivity : AppCompatActivity() {
 
@@ -78,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
             when {
                 loginResult.error != null -> {
                     Log.d("VERBOSE", "loginResult error")
-                    message.text = loginResult.error
+                    message.text = getMessage(loginResult.error)
                 }
                 loginResult.resetPasswordSuccess != null -> {
                     Log.d("VERBOSE", "loginResult reset password")
@@ -157,6 +158,27 @@ class LoginActivity : AppCompatActivity() {
                 false
             }
         }
+    }
+
+    private fun getMessage(error: Exception): String? {
+        when {
+            error is NotVerifiedSignInException -> {
+                return getString(R.string.error_sign_in_not_verified)
+            }
+            error is SignInException -> {
+                return getString(R.string.error_sign_in_failure)
+            }
+            error is SignUpException -> {
+                return getString(R.string.error_sign_up_failure)
+            }
+            error is ResetPasswordException -> {
+                return getString(R.string.error_reset_password_failure)
+            }
+            else -> {
+                return getString(R.string.error_unknown)
+            }
+        }
+
     }
 }
 
