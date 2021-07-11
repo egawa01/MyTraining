@@ -22,6 +22,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val textView = binding.textView
+
+        textView.setOnClickListener {
+            Log.d("VERBOSE", "textView OnClick Process")
+            val workoutListViewIntent = Intent(this,WorkoutListActivity::class.java)
+            workoutListViewIntent.putExtra(getString(R.string.extra_username), textView.text)
+            startActivity(workoutListViewIntent)
+        }
 /*
         val startForResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
