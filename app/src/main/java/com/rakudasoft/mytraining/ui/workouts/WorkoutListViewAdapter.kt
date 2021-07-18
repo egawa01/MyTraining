@@ -1,10 +1,11 @@
-package com.rakudasoft.mytraining
+package com.rakudasoft.mytraining.ui.workouts
 
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.rakudasoft.mytraining.R
 
 class WorkoutListViewAdapter(context : Context, private val list:List<String>)
     : RecyclerView.Adapter<WorkoutViewHolder>() {

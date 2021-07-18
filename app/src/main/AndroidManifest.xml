@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyTraining">
         <activity
-            android:name=".WorkoutListActivity"
+            android:name=".ui.workouts.WorkoutListActivity"
             android:label="@string/title_activity_workout_list"
             android:theme="@style/Theme.MyTraining.NoActionBar"></activity>
         <activity

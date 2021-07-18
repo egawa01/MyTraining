@@ -1,15 +1,13 @@
-package com.rakudasoft.mytraining
+package com.rakudasoft.mytraining.ui.workouts
 
 import android.os.Bundle
 import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.rakudasoft.mytraining.R
 import com.rakudasoft.mytraining.databinding.ActivityWorkoutListBinding
 
 class WorkoutListActivity : AppCompatActivity() {

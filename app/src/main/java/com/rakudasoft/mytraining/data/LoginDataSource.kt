@@ -30,11 +30,7 @@ class LoginDataSource {
 
     var resetPasswordCompletedListner : OnResetPasswordCompletedListener? = null
 
-    private lateinit var auth : FirebaseAuth
-
-    init {
-        auth = FirebaseAuth.getInstance()
-    }
+    private var auth : FirebaseAuth = FirebaseAuth.getInstance()
 
     fun login(username: String, password: String) {
 

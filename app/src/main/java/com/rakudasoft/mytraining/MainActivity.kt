@@ -8,6 +8,7 @@ import android.util.Log
 //import androidx.activity.result.contract.ActivityResultContracts
 import com.rakudasoft.mytraining.databinding.ActivityMainBinding
 import com.rakudasoft.mytraining.ui.login.LoginActivity
+import com.rakudasoft.mytraining.ui.workouts.WorkoutListActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         textView.setOnClickListener {
             Log.d("VERBOSE", "textView OnClick Process")
-            val workoutListViewIntent = Intent(this,WorkoutListActivity::class.java)
+            val workoutListViewIntent = Intent(this, WorkoutListActivity::class.java)
             workoutListViewIntent.putExtra(getString(R.string.extra_username), textView.text)
             startActivity(workoutListViewIntent)
         }
