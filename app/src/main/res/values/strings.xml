@@ -31,5 +31,9 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="label_name">名前</string>
+    <string name="label_description">説明</string>
+    <string name="label_cancel">CANCEL</string>
+    <string name="label_ok">OK</string>
 
 </resources>

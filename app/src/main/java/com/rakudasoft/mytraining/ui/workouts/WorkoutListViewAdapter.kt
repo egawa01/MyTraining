@@ -6,8 +6,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.rakudasoft.mytraining.R
+import com.rakudasoft.mytraining.data.model.Workout
 
-class WorkoutListViewAdapter(context : Context, private val list:List<String>)
+class WorkoutListViewAdapter(context : Context, private val list:List<Workout>)
     : RecyclerView.Adapter<WorkoutViewHolder>() {
     private val layoutInflater = LayoutInflater.from(context)
 
@@ -24,7 +25,7 @@ class WorkoutListViewAdapter(context : Context, private val list:List<String>)
     }
 
     override fun onBindViewHolder(holder: WorkoutViewHolder, position: Int) {
-        val name = list[position]
+        val name = list[position].name
         Log.d("VERBOSE", "onBindViewHolder $position $name")
         holder.workoutName.text = name
     }

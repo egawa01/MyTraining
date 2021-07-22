@@ -23,26 +23,10 @@ class WorkoutListViewModel(private val repository: WorkoutRepository) : ViewMode
             Log.d(logLevel, "WorkoutListViewModel: repository.getSFailureListener process")
             _workoutListState.value = WorkoutListState(error = it)
         }
-
-        repository.createSuccessListener = {
-            Log.d(logLevel, "WorkoutListViewModel: repository.getSuccessListener process")
-            get()
-        }
-        repository.createFailureListener = {
-            Log.d(logLevel, "WorkoutListViewModel: repository.createSFailureListener process")
-            _workoutListState.value = WorkoutListState(error = it)
-        }
-
     }
 
     fun get() {
         Log.d(logLevel, "WorkoutListViewModel.get() process")
         repository.get()
     }
-
-    fun create(workout : Workout) {
-        Log.d(logLevel, "WorkoutListViewModel.create() process")
-        repository.create(workout)
-    }
-
 }
