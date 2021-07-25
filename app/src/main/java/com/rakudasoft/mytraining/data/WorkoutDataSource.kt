@@ -19,6 +19,8 @@ class WorkoutDataSource (private val userId : String) {
     var getItemFailureListener       : OnFailureListener? = null
     var updateSuccessListener   : OnSuccessListener<Workout>? = null
     var updateFailureListener   : OnFailureListener? = null
+    var deleteSuccessListener       : OnSuccessListener<String>? = null
+    var deleteFailureListener       : OnFailureListener? = null
 
     private val logLevel = "VERBOSE"
     private val collectionPath = "users/$userId/workouts"
@@ -88,7 +90,7 @@ class WorkoutDataSource (private val userId : String) {
     }
 
     fun getItem(workoutId : String) {
-        Log.d(logLevel, "WorkoutDataSource.getItem() start")
+        Log.d(logLevel, "WorkoutDataSource.getItem($workoutId) start")
         try {
             store.collection(collectionPath)
                 .document(workoutId)
@@ -98,7 +100,7 @@ class WorkoutDataSource (private val userId : String) {
                     getItemSuccessListener?.invoke(getWorkout(it))
                 }
                 .addOnFailureListener {
-                    Log.d(logLevel, "WorkoutDataSource.getItem() Error $it")
+                    Log.d(logLevel, "WorkoutDataSource.getItem() Failure $it")
                     getItemFailureListener?.invoke(it)
                 }
         }
@@ -108,6 +110,26 @@ class WorkoutDataSource (private val userId : String) {
         }
     }
 
+    fun delete(workoutId : String) {
+        Log.d(logLevel, "WorkoutDataSource.delete($workoutId) start")
+        try {
+            store.collection(collectionPath)
+                .document(workoutId)
+                .delete()
+                .addOnSuccessListener {
+                    Log.d("VERBOSE", "WorkoutDataSource.delete() success")
+                    deleteSuccessListener?.invoke(workoutId)
+                }
+                .addOnFailureListener {
+                    Log.d(logLevel, "WorkoutDataSource.delete() Failure $it")
+                    deleteFailureListener?.invoke(it)
+                }
+        }
+        catch (e : Exception) {
+            Log.d(logLevel, "WorkoutDataSource.getItem() Error $e")
+            deleteFailureListener?.invoke(e)
+        }
+    }
     private fun getDbData(workout: Workout): Map<String, Any> {
         return mutableMapOf(
             "id" to workout.id,

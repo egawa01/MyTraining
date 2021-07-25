@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">My Training</string>
     <string name="title_activity_login">Login</string>
+    <string name="title_alert_error">Error</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
@@ -21,6 +22,7 @@
     <string name="error_sign_up_error">Registration Error</string>
     <string name="error_reset_password_failure">Fail to reset password.</string>
     <string name="error_reset_password_error">Resetting password Error</string>
+    <string name="error_form_mandatory">Input more than 1 character.</string>
     <string name="error_unknown">Unknown Error</string>
     <string name="title_activity_workout_list">WorkoutListActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -28,12 +30,15 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="label_name">名前</string>
-    <string name="label_description">説明</string>
-    <string name="label_cancel">CANCEL</string>
+    <string name="label_name">Name</string>
+    <string name="label_description">Description</string>
+    <string name="label_cancel">Cancel</string>
     <string name="label_ok">OK</string>
+    <string name="label_yes">Yes</string>
+    <string name="label_no">No</string>
+    <string name="delete_text">Delete</string>
+    <string name="message_delete_confirmation">Do you delete this item?</string>
 
 </resources>

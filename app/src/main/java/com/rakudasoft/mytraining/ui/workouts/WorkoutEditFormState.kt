@@ -2,8 +2,8 @@ package com.rakudasoft.mytraining.ui.workouts
 
 data class WorkoutEditFormState (
     val name : String? = null,
-    val isNameValid : Boolean = false,
+    val nameError : Int? = null,
     val description : String? = null,
-    val isDescriptionValid : Boolean = false,
+    val descriptionError : Int? = null,
     val isFormValid : Boolean = false
         )

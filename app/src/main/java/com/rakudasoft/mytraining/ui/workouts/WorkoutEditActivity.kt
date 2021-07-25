@@ -1,9 +1,12 @@
 package com.rakudasoft.mytraining.ui.workouts
 
 import android.app.Activity
+import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
@@ -68,8 +71,22 @@ class WorkoutEditActivity : AppCompatActivity() {
                 finish()
             }
 
+            if(workoutEditResultState.deletedWorkoutId != null) {
+                Log.d(logLevel, "workout is deleted successfully.")
+                setResult(Activity.RESULT_OK)
+                finish()
+            }
+
             if (workoutEditResultState.error != null) {
-                Log.d(logLevel, "Error")
+                Log.d(logLevel, "Error: " + workoutEditResultState.error.toString())
+                val message = workoutEditResultState.error.message
+                AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.title_alert_error))
+                    .setMessage(message)
+                    .setPositiveButton(getString(R.string.label_ok)){ _, _ ->
+                        Log.d(logLevel, "OK is selected.")
+                    }
+                    .show()
             }
         })
 
@@ -86,12 +103,12 @@ class WorkoutEditActivity : AppCompatActivity() {
                 textDescription.setText(workoutEditFormState.description)
             }
 
-            if(!workoutEditFormState.isNameValid) {
-                textName.error = "Error"
+            if(workoutEditFormState.nameError != null) {
+                textName.error = getString(workoutEditFormState.nameError)
             }
 
-            if(!workoutEditFormState.isDescriptionValid) {
-                textDescription.error = "Error"
+            if(workoutEditFormState.descriptionError != null) {
+                textDescription.error = getString(workoutEditFormState.descriptionError)
             }
 
             buttonOk.isEnabled = workoutEditFormState.isFormValid
@@ -121,5 +138,39 @@ class WorkoutEditActivity : AppCompatActivity() {
                 Log.d(logLevel, "textDescription.doAfterTextChanged process")
                 viewModel.formChanged(textName.text.toString(), textDescription.text.toString())
             }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        if(workoutId != null) {
+            menuInflater.inflate(R.menu.workout_edit, menu)
+        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.delete -> {
+                Log.d(logLevel, "WorkoutEditActivity.onOptionsItemSelected process")
+                AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.delete_text))
+                    .setMessage(getString(R.string.message_delete_confirmation))
+                    .setPositiveButton(getString(R.string.label_yes)) { _, _ ->
+                        Log.d(logLevel, "Yes is selected.")
+                        if(workoutId != null) {
+                            Log.d(logLevel, "viewMode.delete calling")
+                            viewModel.delete()
+                        } else {
+                            Log.d(logLevel, "createNew mode delete is cancel")
+                            setResult(Activity.RESULT_CANCELED)
+                            finish()
+                        }
+                    }
+                    .setNegativeButton(getString(R.string.label_no)) { _, _ ->
+                        Log.d(logLevel, "No is selected.")
+                    }
+                    .show()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
