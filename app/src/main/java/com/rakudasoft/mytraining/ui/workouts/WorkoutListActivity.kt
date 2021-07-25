@@ -22,6 +22,7 @@ class WorkoutListActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityWorkoutListBinding
     private lateinit var viewModel : WorkoutListViewModel
+    lateinit var userId : String
 
     private val logLevel = "VERBOSE"
 
@@ -35,15 +36,19 @@ class WorkoutListActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        val userId : String? = intent.getStringExtra(getString(R.string.extra_username))
-        if(userId == null) {
+        val userIdN : String? = intent.getStringExtra(getString(R.string.extra_username))
+        if(userIdN == null) {
             Log.d(logLevel, "userId is null")
             finish()
         }
         else {
-            viewModel = ViewModelProvider(this, WorkoutListViewModelFactory(userId))
-                .get(WorkoutListViewModel::class.java)
+            userId = userIdN
+            Log.d(logLevel, "userId is $userId")
         }
+
+        viewModel = ViewModelProvider(this, WorkoutListViewModelFactory(userId))
+            .get(WorkoutListViewModel::class.java)
+
 
         viewModel.workoutListState.observe(this@WorkoutListActivity, Observer {
             val workoutListState = it ?: return@Observer
@@ -72,22 +77,27 @@ class WorkoutListActivity : AppCompatActivity() {
         })
 
         binding.fab.setOnClickListener {
+            Log.d(logLevel, "fab.onClick process")
             val intent = Intent(this, WorkoutEditActivity::class.java)
-            intent.putExtra(getString(R.string.extra_username), userId)
+            intent.putExtra(WorkoutEditActivity.EXTRA_USER_ID, userId)
             startActivityForResult(intent, WorkoutEditActivity.REQUEST_CODE)
         }
 
-        viewModel.get()
+
+        viewModel.getAll()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        Log.d(logLevel, "WorkoutListActivity.onActivityResult process")
+
         when (requestCode) {
             WorkoutEditActivity.REQUEST_CODE -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        viewModel.get()
+                        Log.d(logLevel, "Result.OK")
+                        viewModel.getAll()
                     }
                 }
             }

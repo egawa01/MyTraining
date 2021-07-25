@@ -25,8 +25,8 @@ class WorkoutListViewModel(private val repository: WorkoutRepository) : ViewMode
         }
     }
 
-    fun get() {
-        Log.d(logLevel, "WorkoutListViewModel.get() process")
-        repository.get()
+    fun getAll() {
+        Log.d(logLevel, "WorkoutListViewModel.getAll() process")
+        repository.getAll()
     }
 }

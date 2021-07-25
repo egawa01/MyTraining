@@ -8,6 +8,10 @@ class WorkoutRepository(private val dataSource: WorkoutDataSource) {
     var getFailureListener       : OnFailureListener? = null
     var createSuccessListener   : OnSuccessListener<Workout>? = null
     var createFailureListener   : OnFailureListener? = null
+    var getItemSuccessListener      : OnSuccessListener<Workout>? = null
+    var getItemFailureListener       : OnFailureListener? = null
+    var updateSuccessListener   : OnSuccessListener<Workout>? = null
+    var updateFailureListener   : OnFailureListener? = null
 
     private val logLevel = "VERBOSE"
 
@@ -29,11 +33,27 @@ class WorkoutRepository(private val dataSource: WorkoutDataSource) {
         dataSource.createFailureListener = {
             createFailureListener?.invoke(it)
         }
+
+        dataSource.getItemSuccessListener = {
+            getItemSuccessListener?.invoke(it)
+        }
+
+        dataSource.getItemFailureListener = {
+            getItemFailureListener?.invoke(it)
+        }
+
+        dataSource.updateSuccessListener = {
+            updateSuccessListener?.invoke(it)
+        }
+
+        dataSource.updateFailureListener = {
+            updateFailureListener?.invoke(it)
+        }
     }
 
-    fun get() {
+    fun getAll() {
         Log.d(logLevel, "WorkoutRepository.get() start")
-        dataSource.get()
+        dataSource.getAll()
     }
 
     fun create(workOut : Workout) {
@@ -41,4 +61,13 @@ class WorkoutRepository(private val dataSource: WorkoutDataSource) {
         dataSource.create(workOut)
     }
 
+    fun getitem(workoutId: String) {
+        Log.d(logLevel, "WorkoutRepository.getItem() start")
+        dataSource.getItem(workoutId)
+    }
+
+    fun update(workOut : Workout) {
+        Log.d(logLevel, "WorkoutRepository.update() start")
+        dataSource.update(workOut)
+    }
 }

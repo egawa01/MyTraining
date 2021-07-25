@@ -9,7 +9,7 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="action_regiser">register</string>
+    <string name="action_register">register</string>
     <string name="action_reset_password">reset password</string>
     <string name="message_reset_password_success">Check mail for resetting password!!</string>
     <string name="message_register_success">Check mail for verifying user!!</string>
